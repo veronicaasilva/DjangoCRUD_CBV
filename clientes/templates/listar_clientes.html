@@ -21,7 +21,7 @@
 	<!-- Listagem clientes -->  	
 	<div class="table-responsive-md">
 		<table class="table table-hover table-bordered">
-			<thead class="thead-dark">
+			<thead class="table-info">
 				<tr>
 					<th scope="col">Nome</th>
 					<th scope="col">Email</th>
@@ -37,9 +37,9 @@
 					<td>{{ cliente.email }} </td>
 					<td>{{ cliente.cidade }} </td>
 					<td>
-						<a href="{% url 'visualizar_cliente' cliente.pk %}" class="btn btn-outline-dark" > <i class="far fa-eye"></i> Visualizar </a>
-						<a href="{% url 'atualizar_cliente' cliente.id %}" class="btn btn-outline-dark"> <i class="fas fa-user-edit"></i> Atualizar </a>
-						<a href="{% url 'deletar_cliente' cliente.id %}" class="btn btn-outline-dark"><i class="far fa-trash-alt"></i> Excluir </a>       
+						<a href="{% url 'visualizar_cliente' cliente.pk %}" class="btn btn-outline-info" > <i class="far fa-eye"></i> Visualizar </a>
+						<a href="{% url 'atualizar_cliente' cliente.id %}" class="btn btn-outline-info"> <i class="fas fa-user-edit"></i> Atualizar </a>
+						<a href="{% url 'deletar_cliente' cliente.id %}" class="btn btn-outline-info"><i class="far fa-trash-alt"></i> Excluir </a>       
 					</td>
 				<!-- /linhas -->  
 
