@@ -1,12 +1,16 @@
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 from .models import Cliente
 from .forms import ClienteForm
 
-class ClienteListView(ListView):
+
+class ClienteListView(LoginRequiredMixin, ListView):
     template_name = 'listar_clientes.html'
     queryset = Cliente.objects.all()
     context_object_name = 'clientes'
@@ -20,34 +24,41 @@ class ClienteListView(ListView):
         return queryset
 
 
-class ClienteDetailView(DetailView):
+class ClienteDetailView(LoginRequiredMixin, DetailView):
     template_name='visualizar_cliente.html'
     queryset = Cliente.objects.all()
-    '''
-    def get_object(self):
-        id_ = self.kwargs.get('id')
-        return get_object_or_404(Cliente, id=id_)'''
 
-class ClienteCreateView(CreateView):
+
+class ClienteCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Cliente
     template_name = "cadastrar_cliente.html"
     form_class = ClienteForm
+    success_message = ('Cliente cadastro com sucesso!')
     success_url = reverse_lazy('listar_clientes')
-    success_message = 'Cadastro Realizado com sucesso' 
+    
+    
 
-
-class ClienteUpdateView(UpdateView):
+class ClienteUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = Cliente
     template_name = "cadastrar_cliente.html"
     form_class = ClienteForm
-    success_url = '/'
-    success_message = "Cadastro atualizado com sucesso."
-
-class ClienteDeleteView(DeleteView):
-    model = Cliente
-    template_name = "excluir_cliente_confirmacao"
+    success_message = 'Cadastro alterado com sucesso' 
     success_url = reverse_lazy('listar_clientes')
+    
 
+class ClienteDeleteView(LoginRequiredMixin, DeleteView):
+    model = Cliente
+    template_name = "excluir_cliente_confirmacao.html"
+    success_url = reverse_lazy('listar_clientes')
+    
+
+
+def clonar_cliente(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+    cliente.pk = None
+    cliente.save()
+    messages.success(request,  'Cliente clonado com sucesso!') 
+    return redirect('listar_clientes')
 
 
 
