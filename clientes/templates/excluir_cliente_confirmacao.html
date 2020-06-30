@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %} Excluir cadastro de {{cliente.nomecompleto}} {% endblock %}
+{% block main %} 
+	<div class="container text-center">
+		<div class="card">
+			<div class="card-header">
+				Confirmar exclusão
+			</div>
+			<div class="card-body">
+				<p class="card-text h5">Tem certeza de que deseja excluir o cadastro de <span class="font-weight-bold">{{ cliente.nomecompleto }}?</span></p>
+				<p class="card-text"> Esta operação é irreversível</p>
+				<form method="post">
+					{% csrf_token %}
+					<a href="{% url 'listar_clientes' %}" class="btn btn-secondary"> <i class="fas fa-arrow-left"></i> Voltar </a>
+					<button type="submit" class="btn btn-danger"> Excluir </button>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

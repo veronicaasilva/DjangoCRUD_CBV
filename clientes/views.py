@@ -1,75 +1,53 @@
-from django.contrib import messages
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
 from .models import Cliente
 from .forms import ClienteForm
 
-def listar_clientes(request):
-    busca = request.GET.get('busca')
-    if busca:
-        clientes_list = Cliente.objects.filter(nomecompleto__icontains=busca)
-    else:
-        clientes_list = Cliente.objects.all()   
-    paginator = Paginator(clientes_list, 10)
-    page = request.GET.get('page')
-    clientes = paginator.get_page(page)
-    context = {
-        'clientes' : clientes
-	}
-    return render(request, 'listar_clientes.html', context)
+class ClienteListView(ListView):
+    template_name = 'listar_clientes.html'
+    queryset = Cliente.objects.all()
+    context_object_name = 'clientes'
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = super(ClienteListView, self).get_queryset()
+        busca = self.request.GET.get('busca')
+        if busca:
+            queryset = queryset.filter(nomecompleto__icontains=busca)
+        return queryset
 
 
-def cadastrar_cliente(request): 
-    form =  ClienteForm(request.POST or None, request.FILES or None)
-    if str(request.method) == 'POST':
-        if form.is_valid():
-            form.save()
-            messages.success(request,  'Cliente cadastrado com sucesso!')
-            return redirect('listar_clientes')
-        else:
-            messages.error(request,  'Erro ao cadastrar o cliente. Contate o administrador')
-    context = {
-        'form': form
-    }
-    return render(request,'cadastrar_cliente.html',context)
+class ClienteDetailView(DetailView):
+    template_name='visualizar_cliente.html'
+    queryset = Cliente.objects.all()
+    '''
+    def get_object(self):
+        id_ = self.kwargs.get('id')
+        return get_object_or_404(Cliente, id=id_)'''
+
+class ClienteCreateView(CreateView):
+    model = Cliente
+    template_name = "cadastrar_cliente.html"
+    form_class = ClienteForm
+    success_url = reverse_lazy('listar_clientes')
+    success_message = 'Cadastro Realizado com sucesso' 
 
 
-def atualizar_cliente(request, id):
-    cliente = get_object_or_404(Cliente, pk=id)
-    form = ClienteForm(request.POST or None, request.FILES or None, instance=cliente)
-    if str(request.method) == 'POST':
-        if form.is_valid():
-            form.save()
-            messages.success(request,  'Cliente atualizado com sucesso!')
-            return render(request, 'visualizar_cliente.html', {'cliente': cliente})
-        else:
-            messages.error(request,  'Erro ao alterar o contato')
-    context = {
-        'form': form,
-        'cliente' : cliente
-    }
-    return render(request,'atualizar_cliente.html',context)
+class ClienteUpdateView(UpdateView):
+    model = Cliente
+    template_name = "cadastrar_cliente.html"
+    form_class = ClienteForm
+    success_url = '/'
+    success_message = "Cadastro atualizado com sucesso."
+
+class ClienteDeleteView(DeleteView):
+    model = Cliente
+    template_name = "excluir_cliente_confirmacao"
+    success_url = reverse_lazy('listar_clientes')
 
 
-def visualizar_cliente(request, id):
-    cliente = get_object_or_404(Cliente, pk=id)
-    context = {
-        'cliente' : cliente
-    }
-    return render(request,'visualizar_cliente.html',context)
 
 
-def excluir_cliente(request, id):
-    cliente = get_object_or_404(Cliente, pk=id)
-    cliente.delete()
-    messages.success(request, 'Cliente excluído com sucesso')
-
-    return redirect('listar_clientes')
-
-
-def clonar_cliente(request, id):
-    cliente = get_object_or_404(Cliente, pk=id)
-    cliente.pk = None
-    cliente.save()
-    messages.success(request,  'Cliente clonado com sucesso!') 
-    return redirect('listar_clientes')
