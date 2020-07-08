@@ -1,11 +1,10 @@
-# READ.ME
+##GESTÃO CLIENTES
+> O Gestão de Clientes é uma aplicação que busca facilitar o controle dos dados pessoais e de contatos dos clientes.
 
-### Gestão de Clientes
+![](https://user-images.githubusercontent.com/63860290/86915880-19c5bb00-c0f9-11ea-8343-2cf71e53f35b.png)
 
-O Gestão de Clientes é uma aplicação que busca facilitar o controle dos dados pessoais e de contatos dos clientes.
-
-Este projeto faz parte do meu portfólio pessoal e foi criado com o objetivo de estudar os recursos de Class Based View do framework Django.
-
+O objetivo foi desenvolvedor uma aplicação simples para implementação de um CRUD explorando os recursos de Class Based View do framework Django. 
+    
 ### SOBRE
 
 Após efetuar o login, o usuário pode:
@@ -24,8 +23,9 @@ Após efetuar o login, o usuário pode:
 
 - Python
 - Django
+- SQlite
 - Bootstrap4
-- Heroku
+
 
 ### EXECUTANDO PROJETO LOCALMENTE:
 
