@@ -1,4 +1,4 @@
-##GESTÃO CLIENTES
+## GESTÃO CLIENTES
 > O Gestão de Clientes é uma aplicação que busca facilitar o controle dos dados pessoais e de contatos dos clientes.
 
 ![](https://user-images.githubusercontent.com/63860290/86915880-19c5bb00-c0f9-11ea-8343-2cf71e53f35b.png)
